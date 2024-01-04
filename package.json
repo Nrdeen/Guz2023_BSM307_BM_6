@@ -1,0 +1,28 @@
+{
+  "name": "chats",
+  "version": "1.0.0",
+  "description": "Bu, kullanıcıların birbirleriyle bağlantı kurmasına ve gerçek zamanlı olarak sohbet etmesine olanak tanıyan gerçek zamanlı bir sohbet sitesidir. MERN yığını (MongoDB, Express.js, React.js ve Node.js), Socket.io, Redux Toolkit ve Tailwind CSS kullanılarak oluşturulmuştur.",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/cli": "^7.22.9",
+    "@babel/core": "^7.22.9",
+    "@babel/preset-env": "^7.22.9",
+    "@babel/preset-react": "^7.22.5",
+    "babel-loader": "^9.1.3",
+    "prettier": "^3.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nrdeen/Chats.git"
+  },
+  "author": "Nrdeen Anber",
+  "license": "Bartin Üniversitesi",
+  "bugs": {
+    "url": "https://github.com/Nrdeen/Chats/issues"
+  },
+  "homepage": "https://github.com/Nrdeen/Chats#readme"
+}
