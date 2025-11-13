@@ -8,6 +8,7 @@ import { useState } from 'react'
 import { BsEmojiLaughing, BsEmojiExpressionless } from "react-icons/bs"
 import { toast } from 'react-toastify';
 import { validUser } from '../apis/auth'
+import '../asus-theme.css'
 const defaultData = {
   firstname: "",
   lastname: "",
@@ -79,54 +80,128 @@ function Regsiter() {
     isValid()
   }, [])
   return (
-    <div className='bg-[#121418] w-[100vw] h-[100vh] flex justify-center items-center'>
-      <div className='w-[90%] sm:w-[400px] pl-0 ml-0 h-[400px] sm:pl-0 sm:ml-9 mt-10 relative'>
-        <div className='absolute -top-7 left-0'>
-          <h3 className=' text-[25px] font-bold tracking-wider text-[#fff]'>Register</h3>
-          <p className='text-[#fff] text-[12px] tracking-wider font-medium'>Have Account ? <Link className='text-[rgba(0,195,154,1)] underline' to="/login">Sign in</Link></p>
+    <div className='asus-container w-[100vw] h-[100vh] flex justify-center items-center relative'>
+      {/* ASUS Background Pattern */}
+      <div className='absolute inset-0 opacity-10'>
+        <div className='absolute top-10 right-10 w-64 h-64 bg-gradient-to-br from-[#00d9ff] to-transparent rounded-full blur-3xl'></div>
+        <div className='absolute bottom-10 left-10 w-96 h-96 bg-gradient-to-tl from-[#0066ff] to-transparent rounded-full blur-3xl'></div>
+      </div>
+
+      <div className='w-[90%] sm:w-[480px] relative z-10'>
+        {/* ASUS Logo & Header */}
+        <div className='text-center mb-8'>
+          <h1 className='asus-logo mb-2'>ASUS CHAT</h1>
+          <div className='asus-divider'></div>
         </div>
-        <form className='flex flex-col gap-y-3 mt-[12%]' onSubmit={handleOnSubmit}>
-          <div className='flex gap-x-2 w-[100%]'>
-            <input onChange={handleOnChange} className='bg-[#222222] h-[50px] pl-3 text-[#ffff] w-[49%] sm:w-[47%]' type="text" name="firstname" placeholder='First Name' value={formData.firstname} required />
-            <input onChange={handleOnChange} className='bg-[#222222] h-[50px] pl-3 text-[#ffff] w-[49%] sm:w-[47%]' type="text" name="lastname" placeholder='Last Name' value={formData.lastname} required />
+
+        {/* Register Card */}
+        <div className='asus-card p-8'>
+          <div className='mb-6'>
+            <h3 className='text-[28px] font-bold tracking-wider asus-text-white mb-2'>Create Account</h3>
+            <p className='asus-text-secondary text-[14px] tracking-wide'>
+              Have Account? <Link className='asus-text-primary hover:underline transition-all' to="/login">Sign in</Link>
+            </p>
           </div>
-          <div>
-            <input onChange={handleOnChange} className='bg-[#222222] h-[50px] pl-3 text-[#ffff] w-[100%] sm:w-[96.3%]' type="email" name="email" placeholder="Email" value={formData.email} required />
-          </div>
-          <div className='relative flex flex-col gap-y-3'>
-            <input onChange={handleOnChange} className='bg-[#222222] h-[50px] pl-3 text-[#ffff] w-[100%] sm:w-[96.3%]' type={showPass ? "text" : "password"} name="password" placeholder="Password" value={formData.password} required />
 
-
-            {/* <button onCli type="button">
-              <BsEmojiExpressionless className='text-[#fff] absolute top-3 right-6 w-[30px] h-[25px]' />
-            </button> */}
-            {
-              !showPass ? <button type='button'><BsEmojiLaughing onClick={() => setShowPass(!showPass)} className='text-[#fff] absolute top-3 right-4 sm:right-6 w-[30px] h-[25px]' /></button> : <button type='button'> <BsEmojiExpressionless onClick={() => setShowPass(!showPass)} className='text-[#fff] absolute top-3 right-4 sm:right-6 w-[30px] h-[25px]' /></button>
-            }
-
-
-          </div>
-          <button style={{ background: "linear-gradient(90deg, rgba(0,195,154,1) 0%, rgba(224,205,115,1) 100%)" }} className='w-[100%]  sm:w-[96.3%] h-[50px] font-bold text-[#121418] tracking-wide text-[17px] relative' type='submit'>
-            <div style={{ display: isLoading ? "" : "none" }} className='absolute -top-[53px] left-[29.5%] sm:-top-[53px] sm:left-[87px]'>
-
-              <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_h9kds1my.json" background="transparent" speed="1" style={{ width: "200px", height: "160px" }} loop autoplay></lottie-player>
+          <form className='flex flex-col gap-y-4' onSubmit={handleOnSubmit}>
+            <div className='flex gap-x-3 w-[100%]'>
+              <div className='flex-1'>
+                <label className='asus-text-secondary text-[12px] mb-2 block uppercase tracking-wider'>First Name</label>
+                <input 
+                  onChange={handleOnChange} 
+                  className='asus-input w-[100%]' 
+                  type="text" 
+                  name="firstname" 
+                  placeholder='John' 
+                  value={formData.firstname} 
+                  required 
+                />
+              </div>
+              <div className='flex-1'>
+                <label className='asus-text-secondary text-[12px] mb-2 block uppercase tracking-wider'>Last Name</label>
+                <input 
+                  onChange={handleOnChange} 
+                  className='asus-input w-[100%]' 
+                  type="text" 
+                  name="lastname" 
+                  placeholder='Doe' 
+                  value={formData.lastname} 
+                  required 
+                />
+              </div>
             </div>
-            <p style={{ display: isLoading ? "none" : "block" }} className='test-[#fff]'>Regsiter</p>
-          </button>
-          <p className='text-[#fff] text-center sm:-ml-8'>/</p>
-          <GoogleLogin
-            clientId={process.env.REACT_APP_CLIENT_ID}
-            render={(renderProps) => (
-              <button style={{ borderImage: "linear-gradient(to right, rgba(0,195,154,1) 50%, rgba(224,205,115,1) 80%)", borderImageSlice: "1" }} onClick={renderProps.onClick} disabled={renderProps.disabled} aria-label="Continue with google" className="focus:ring-2 focus:ring-offset-1   py-3.5 px-4 border rounded-lg  flex items-center w-[100%]  sm:w-[96.3%]" disableElevation={true} disableFocusRipple={true}>
-                <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/sign_in-svg2.svg" alt="google" />
-                <p className="text-[base] font-medium ml-4 text-[#fff]">Continue with Google</p>
-              </button>
-            )}
-            onSuccess={googleSuccess}
-            onFailure={googleFailure}
-            cookiePolicy={'single_host_origin'}
-          />
-        </form>
+
+            <div>
+              <label className='asus-text-secondary text-[12px] mb-2 block uppercase tracking-wider'>Email Address</label>
+              <input 
+                onChange={handleOnChange} 
+                className='asus-input w-[100%]' 
+                type="email" 
+                name="email" 
+                placeholder="Enter your email" 
+                value={formData.email} 
+                required 
+              />
+            </div>
+
+            <div className='relative'>
+              <label className='asus-text-secondary text-[12px] mb-2 block uppercase tracking-wider'>Password</label>
+              <input 
+                onChange={handleOnChange} 
+                className='asus-input w-[100%] pr-12' 
+                type={showPass ? "text" : "password"} 
+                name="password" 
+                placeholder="Create a password" 
+                value={formData.password} 
+                required 
+              />
+              {
+                !showPass ? 
+                  <button type='button' className='absolute right-4 top-[42px] transition-all hover:scale-110'>
+                    <BsEmojiLaughing onClick={() => setShowPass(!showPass)} className='text-[#00d9ff] w-[24px] h-[24px]' />
+                  </button> : 
+                  <button type='button' className='absolute right-4 top-[42px] transition-all hover:scale-110'>
+                    <BsEmojiExpressionless onClick={() => setShowPass(!showPass)} className='text-[#00d9ff] w-[24px] h-[24px]' />
+                  </button>
+              }
+            </div>
+
+            <button className='asus-btn w-[100%] h-[52px] mt-4 relative' type='submit'>
+              <div style={{ display: isLoading ? "" : "none" }} className='absolute -top-[53px] left-[50%] transform -translate-x-1/2'>
+                <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_h9kds1my.json" background="transparent" speed="1" style={{ width: "200px", height: "160px" }} loop autoplay></lottie-player>
+              </div>
+              <span style={{ display: isLoading ? "none" : "block" }} className='relative z-10'>Register</span>
+            </button>
+
+            <div className='asus-divider my-2'></div>
+
+            <GoogleLogin
+              clientId={process.env.REACT_APP_CLIENT_ID}
+              render={(renderProps) => (
+                <button 
+                  onClick={renderProps.onClick} 
+                  disabled={renderProps.disabled} 
+                  aria-label="Continue with google" 
+                  className="asus-card py-3.5 px-4 flex items-center justify-center w-[100%] hover:border-[#00d9ff] transition-all group"
+                  type="button"
+                >
+                  <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/sign_in-svg2.svg" alt="google" className='w-5 h-5' />
+                  <p className="text-[14px] font-medium ml-3 asus-text-white group-hover:asus-text-primary transition-all">Continue with Google</p>
+                </button>
+              )}
+              onSuccess={googleSuccess}
+              onFailure={googleFailure}
+              cookiePolicy={'single_host_origin'}
+            />
+          </form>
+        </div>
+
+        {/* Footer */}
+        <div className='text-center mt-6'>
+          <p className='asus-text-secondary text-[11px] tracking-wider'>
+            Powered by ASUS Technology © 2024
+          </p>
+        </div>
       </div>
     </div>
   )

@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import MessageHistory from '../components/MessageHistory';
 import io from "socket.io-client"
 import "./home.css"
+import '../asus-theme.css'
 import { fetchChats, setNotifications } from '../redux/chatsSlice';
 import Loading from '../components/ui/Loading';
 import data from '@emoji-mart/data'
@@ -102,80 +103,117 @@ function Chat(props) {
       {
         activeChat ?
           <div className={props.className}>
-            <div className='flex justify-between items-center px-5 bg-[#ffff] w-[100%]'>
-              <div className='flex items-center gap-x-[10px]'>
+            {/* Chat Header */}
+            <div className='asus-header flex justify-between items-center px-6 h-[70px]'>
+              <div className='flex items-center gap-x-4'>
                 <div className='flex flex-col items-start justify-center'>
-                  <h5 className='text-[17px] text-[#2b2e33] font-bold tracking-wide'>{getChatName(activeChat, activeUser)}</h5>
-                  {/* <p className='text-[11px] text-[#aabac8]'>Last seen 5 min ago</p> */}
+                  <h5 className='text-[18px] asus-text-white font-bold tracking-wide'>{getChatName(activeChat, activeUser)}</h5>
+                  <p className='text-[11px] asus-text-secondary'>Active now</p>
                 </div>
               </div>
               <div>
                 <Model />
               </div>
             </div>
-            <div className='scrollbar-hide w-[100%] h-[70vh] md:h-[66vh] lg:h-[69vh] flex flex-col overflow-y-scroll p-4'>
+
+            {/* Messages Area */}
+            <div className='asus-scrollbar w-[100%] h-[calc(100vh-220px)] flex flex-col overflow-y-scroll p-6 bg-gradient-to-b from-[#0a0a0a] to-[#1a1a1a]'>
               <MessageHistory typing={isTyping} messages={messages} />
               <div className='ml-7 -mb-10'>
                 {
                   isTyping ?
                     <Typing width="100" height="100" /> : ""
                 }
-
               </div>
             </div>
-            <div className='absolute left-[31%] bottom-[8%]'>
+
+            {/* Message Input Area */}
+            <div className='absolute bottom-6 left-1/2 transform -translate-x-1/2 w-[90%] max-w-[600px]'>
               {
-                showPicker && <Picker data={data} onEmojiSelect={(e) => setMessage(message + e.native)} />
-              }
-              <div className='border-[1px] border-[#aabac8] px-6 py-3 w-[360px] sm:w-[400px] md:w-[350px] h-[50px] lg:w-[400px] rounded-t-[10px]'>
-
-                <form onKeyDown={(e) => keyDownFunction(e)} onSubmit={(e) => e.preventDefault()}>
-                  <input onChange={(e) => {
-                    setMessage(e.target.value)
-                    if (!socketConnected) return
-                    if (!typing) {
-                      setTyping(true)
-                      socket.emit('typing', activeChat._id)
-                    }
-                    let lastTime = new Date().getTime()
-                    var time = 3000
-                    setTimeout(() => {
-                      var timeNow = new Date().getTime()
-                      var timeDiff = timeNow - lastTime
-                      if (timeDiff >= time && typing) {
-                        socket.emit("stop typing", activeChat._id)
-                        setTyping(false)
-                      }
-                    }, time)
-                  }} className='focus:outline-0 w-[100%] bg-[#f8f9fa]' type="text" name="message" placeholder="Enter message" value={message} />
-                </form>
-
-              </div>
-
-              <div className='border-x-[1px] border-b-[1px] bg-[#f8f9fa] border-[#aabac8] px-6 py-3 w-[360px] sm:w-[400px] md:w-[350px] lg:w-[400px] rounded-b-[10px] h-[50px]'>
-                {/* {
-                  isTyping ? <div>Loading</div> : ""
-                } */}
-                <div className='flex justify-between items-start'>
-
-                  <div className='cursor-pointer' onClick={() => setShowPicker(!showPicker)}>
-
-                    {showPicker ? <BsFillEmojiSmileFill className='w-[20px] h-[20px] text-[#ffb02e] border-[black]' /> : <BsEmojiSmile className='w-[20px] h-[20px]' />}
-                  </div>
-                  <button onClick={(e) => keyDownFunction(e)} className='bg-[#f8f9fa] border-[2px] border-[#d4d4d4] text-[14px] px-2 py-[3px] text-[#9e9e9e] font-medium rounded-[7px] -mt-1'>Send</button>
+                showPicker && 
+                <div className='mb-2'>
+                  <Picker 
+                    data={data} 
+                    onEmojiSelect={(e) => setMessage(message + e.native)}
+                    theme="dark"
+                  />
                 </div>
+              }
+              
+              <div className='asus-card p-4'>
+                <form onKeyDown={(e) => keyDownFunction(e)} onSubmit={(e) => e.preventDefault()}>
+                  <div className='flex items-center gap-x-3'>
+                    {/* Emoji Picker Button */}
+                    <button 
+                      type='button'
+                      className='cursor-pointer transition-all hover:scale-110' 
+                      onClick={() => setShowPicker(!showPicker)}
+                    >
+                      {showPicker ? 
+                        <BsFillEmojiSmileFill className='w-[24px] h-[24px] text-[#00d9ff]' /> : 
+                        <BsEmojiSmile className='w-[24px] h-[24px] text-[#00d9ff]' />
+                      }
+                    </button>
+
+                    {/* Message Input */}
+                    <input 
+                      onChange={(e) => {
+                        setMessage(e.target.value)
+                        if (!socketConnected) return
+                        if (!typing) {
+                          setTyping(true)
+                          socket.emit('typing', activeChat._id)
+                        }
+                        let lastTime = new Date().getTime()
+                        var time = 3000
+                        setTimeout(() => {
+                          var timeNow = new Date().getTime()
+                          var timeDiff = timeNow - lastTime
+                          if (timeDiff >= time && typing) {
+                            socket.emit("stop typing", activeChat._id)
+                            setTyping(false)
+                          }
+                        }, time)
+                      }} 
+                      className='flex-1 bg-transparent asus-text-white outline-none text-[14px] px-3 py-2 border border-[#00d9ff]/30 rounded-lg focus:border-[#00d9ff] transition-all' 
+                      type="text" 
+                      name="message" 
+                      placeholder="Type your message..." 
+                      value={message} 
+                    />
+
+                    {/* Send Button */}
+                    <button 
+                      onClick={(e) => keyDownFunction(e)} 
+                      className='asus-btn px-6 py-2 text-[13px]'
+                      type='button'
+                    >
+                      Send
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           </div> :
           <div className={props.className}>
-            <div className='relative'>
-              <div className='absolute top-[40vh] left-[44%] flex flex-col items-center justify-center gap-y-3'>
-                <img className='w-[50px] h-[50px] rounded-[25px]' alt="User profile" src={activeUser.profilePic} />
-                <h3 className='text-[#111b21] text-[20px] font-medium tracking-wider'>Welcome <span className='text-[#166e48] text-[19px] font-bold'> {activeUser.name}</span></h3>
+            <div className='relative h-full flex items-center justify-center'>
+              <div className='flex flex-col items-center justify-center gap-y-4'>
+                <img className='asus-avatar w-[80px] h-[80px] asus-glow' alt="User profile" src={activeUser.profilePic} />
+                <div className='text-center'>
+                  <h3 className='asus-text-white text-[24px] font-medium tracking-wider mb-2'>
+                    Welcome back
+                  </h3>
+                  <p className='asus-text-primary text-[20px] font-bold'>
+                    {activeUser.name}
+                  </p>
+                  <p className='asus-text-secondary text-[14px] mt-3'>
+                    Select a chat to start messaging
+                  </p>
+                </div>
+                <div className='asus-divider w-[200px]'></div>
               </div>
             </div>
           </div>
-
       }
     </>
   )

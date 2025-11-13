@@ -12,6 +12,7 @@ import Chat from './Chat'
 import Profile from "../components/Profile"
 import { acessCreate } from "../apis/chat.js"
 import "./home.css"
+import '../asus-theme.css'
 import { fetchChats, setNotifications } from '../redux/chatsSlice'
 import { getSender } from '../utils/logics'
 import { setActiveChat } from '../redux/chatsSlice'
@@ -67,99 +68,111 @@ function Home() {
 
   return (
     <>
-
-      <div className="bg-[#282C35!] scrollbar-hide z-10 h-[100vh]  lg:w-[90%] lg:mx-auto overflow-y-hidden shadow-2xl">
-
-        <div className='flex'>
+      <div className="asus-container scrollbar-hide z-10 h-[100vh] lg:w-[90%] lg:mx-auto overflow-y-hidden">
+        <div className='flex h-full'>
           {
             !showProfile ?
-              <div className="md:flex md:flex-col min-w-[360px] h-[100vh] md:h-[98.6vh] bg-[#ffff] relative">
-
-                <div className='h-[61px] px-4'>
-                  <div className='flex'>
-                    <a className='flex items-center relative  -top-4 block h-[90px]' href='/'>
-
-                      <h3 className='text-[20px] text-[#1f2228] font-body font-extrabold tracking-wider'>Messages</h3>
+              <div className="asus-sidebar md:flex md:flex-col min-w-[360px] h-[100vh] md:h-[98.6vh] relative">
+                {/* Header */}
+                <div className='asus-header h-[70px] px-5'>
+                  <div className='flex items-center justify-between h-full'>
+                    <a className='flex items-center' href='/'>
+                      <h3 className='text-[18px] asus-text-primary font-extrabold tracking-wider uppercase'>Messages</h3>
                     </a>
-                  </div>
-                  <div className='absolute top-4 right-5 flex items-center gap-x-3'>
-                    <button onClick={() => dispatch(setShowNotifications(!showNotifications))}>
-                      <NotificationBadge
-                        count={notifications.length}
-                        effect={Effect.SCALE}
-                        style={{ width: "15px", height: "15px", fontSize: "9px", padding: "4px 2px 2px 2px" }}
-                      />
-                      {
-                        showNotifications ? <RiNotificationBadgeFill style={{ width: "25px", height: "25px", color: "#319268" }} /> : <BiNotification style={{ color: "#319268", width: "25px", height: "25px" }} />
-                      }
+                    
+                    <div className='flex items-center gap-x-4'>
+                      <button 
+                        onClick={() => dispatch(setShowNotifications(!showNotifications))}
+                        className='relative transition-all hover:scale-110'
+                      >
+                        <NotificationBadge
+                          count={notifications.length}
+                          effect={Effect.SCALE}
+                          style={{ 
+                            width: "16px", 
+                            height: "16px", 
+                            fontSize: "9px", 
+                            padding: "4px 2px 2px 2px",
+                            background: "linear-gradient(135deg, #00d9ff 0%, #0066ff 100%)"
+                          }}
+                        />
+                        {
+                          showNotifications ? 
+                            <RiNotificationBadgeFill className='w-[24px] h-[24px] text-[#00d9ff]' /> : 
+                            <BiNotification className='w-[24px] h-[24px] text-[#00d9ff]' />
+                        }
+                      </button>
 
-                    </button>
-                    <div className={`${showNotifications ? "overflow-y-scroll scrollbar-hide tracking-wide absolute top-10 -left-32 z-10 w-[240px] bg-[#fafafa] px-4 py-2 shadow-2xl" : "hidden"}`}>
-                      <div className='text-[13px]'>
-
-                        {!notifications.length && "No new messages"}
+                      {/* Notifications Dropdown */}
+                      <div className={`${showNotifications ? "asus-notification overflow-y-scroll asus-scrollbar tracking-wide absolute top-16 right-5 z-20 w-[280px] max-h-[400px]" : "hidden"}`}>
+                        <div className='asus-text-white text-[13px] font-semibold mb-2 pb-2 border-b border-[#00d9ff]/20'>
+                          {!notifications.length ? "No new messages" : "Notifications"}
+                        </div>
+                        {
+                          notifications.map((e, index) => {
+                            return (
+                              <div 
+                                onClick={() => {
+                                  dispatch(setActiveChat(e.chatId))
+                                  dispatch(setNotifications(notifications.filter((data) => data !== e)))
+                                }} 
+                                key={index} 
+                                className='asus-contact text-[12px] asus-text-secondary hover:asus-text-primary cursor-pointer mb-2'
+                              >
+                                {e.chatId.isGroup ? `New Message in ${e.chatId.chatName}` : `New Message from ${getSender(activeUser, e.chatId.users)}`}
+                              </div>
+                            )
+                          })
+                        }
                       </div>
-                      {
-                        notifications.map((e, index) => {
-                          return (
-                            <div onClick={() => {
-                              dispatch(setActiveChat(e.chatId))
-                              dispatch(setNotifications(notifications.filter((data) => data !== e)))
 
-                            }} key={index} className='text-[12.5px] text-black px-2 cursor-pointer' >
-
-                              {e.chatId.isGroup ? `New Message in ${e.chatId.chatName}` : `New Message from ${getSender(activeUser, e.chatId.users)}`}
-                            </div>
-
-                          )
-
-                        })
-                      }
+                      <button 
+                        onClick={() => dispatch(setShowProfile(true))} 
+                        className='flex items-center gap-x-2 asus-card px-3 py-2 transition-all hover:border-[#00d9ff]'
+                      >
+                        <img className='asus-avatar w-[32px] h-[32px]' src={activeUser?.profilePic} alt="" />
+                        <IoIosArrowDown className='text-[#00d9ff] h-[14px] w-[14px]' />
+                      </button>
                     </div>
-                    <button onClick={() => dispatch(setShowProfile(true))} className='flex items-center gap-x-1 relative'>
-                      <img className='w-[28px] h-[28px] rounded-[25px]' src={activeUser?.profilePic} alt="" />
-                      <IoIosArrowDown style={{ color: "#616c76", height: "14px", width: "14px" }} />
-                    </button>
                   </div>
                 </div>
 
-                <div>
-
-                  <div className='-mt-6 relative pt-6 px-4'>
-                    <form onSubmit={(e) => e.preventDefault()}>
-
-                      <input onChange={handleSearch} className='w-[99.5%] bg-[#f6f6f6] text-[#111b21] tracking-wider pl-9 py-[8px] rounded-[9px] outline-0' type="text" name="search" placeholder="Search" />
-
-                    </form>
-
-                    <div className='absolute top-[36px] left-[27px]'>
-                      <BsSearch style={{ color: "#c4c4c5" }} />
+                {/* Search Section */}
+                <div className='px-4 py-4'>
+                  <form onSubmit={(e) => e.preventDefault()} className='relative'>
+                    <div className='asus-search flex items-center'>
+                      <BsSearch className='text-[#00d9ff] mr-3' />
+                      <input 
+                        onChange={handleSearch} 
+                        className='bg-transparent asus-text-white w-full outline-none text-[14px]' 
+                        type="text" 
+                        name="search" 
+                        placeholder="Search contacts..." 
+                      />
                     </div>
+                  </form>
+
+                  <div className='mt-4'>
                     <Group />
-
-                    <div style={{ display: search ? "" : "none" }} className='h-[100vh] absolute z-10 w-[100%] left-[0px] top-[70px] bg-[#fff] flex flex-col gap-y-3 pt-3 px-4'>
-                      <Search searchResults={searchResults} isLoading={isLoading} handleClick={handleClick} search={search} />
-
-                    </div>
                   </div>
 
-
-                  <Contacts />
-
-
+                  {/* Search Results */}
+                  <div style={{ display: search ? "" : "none" }} className='h-[calc(100vh-150px)] absolute z-10 w-[calc(100%-32px)] left-[16px] top-[140px] asus-sidebar asus-scrollbar overflow-y-auto p-4 rounded-lg'>
+                    <Search searchResults={searchResults} isLoading={isLoading} handleClick={handleClick} search={search} />
+                  </div>
                 </div>
 
-
-              </div> : <Profile className="min-w-[100%] sm:min-w-[360px] h-[100vh] bg-[#fafafa] shodow-xl relative" />
+                {/* Contacts List */}
+                <div className='flex-1 overflow-hidden'>
+                  <Contacts />
+                </div>
+              </div> : 
+              <Profile className="min-w-[100%] sm:min-w-[360px] h-[100vh] asus-sidebar relative" />
           }
-          <Chat className="chat-page relative lg:w-[100%] h-[100vh] bg-[#fafafa]" />
-
-
-
-
+          
+          <Chat className="chat-page relative lg:w-[100%] h-[100vh] asus-container" />
         </div>
-      </div >
-
+      </div>
     </>
   )
 }
